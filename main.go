@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -79,12 +80,20 @@ func generateMap(client *nut.Client) error {
 func main() {
 	nutHost := flag.String("client", os.Getenv("NUT_HOST"), "NUT client")
 	key := flag.String("key", os.Getenv("NUT_KEY"), "the NUT server password/key")
+	hostInterface := flag.String("interface", os.Getenv("GNUT_INTERFACE"), "the listening interface")
+	port := flag.String("port", os.Getenv("GNUT_PORT"), "the listening port")
 	flag.Parse()
 	if *nutHost == "" {
 		log.Fatal("NUT_HOST not set")
 	}
 	if *key == "" {
 		log.Fatal("NUT_KEY not set")
+	}
+	if *hostInterface == "" {
+		*hostInterface = "localhost"
+	}
+	if *port == "" {
+		*port = "8080"
 	}
 	client, connectErr := nut.Connect(*nutHost)
 	if connectErr != nil {
@@ -103,7 +112,8 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", IndexHandler(&client))
 	r.HandleFunc("/{ups}", UPSHandler)
-	err = http.ListenAndServe(":8080", r)
+	listeningInterface := fmt.Sprintf("%s:%s", *hostInterface, *port)
+	err = http.ListenAndServe(listeningInterface, r)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
