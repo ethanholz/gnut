@@ -1,0 +1,29 @@
+{{define "content"}}
+<div class="text-sm breadcrumbs">
+    <ul>
+        <li><h1 class="text-base">GNut</h1></li>
+    </ul>
+</div>
+<div class="overflow-x-auto" id="table-id">
+    <table class="table table-lg">
+        <thead>
+        <tr>
+            <th>Names</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Battery Charge (%)</th> 
+        </tr>
+        </thead>
+        <tbody>
+        {{range $name, $ups := . }}
+            <tr class="hover">
+                <td><a href="/{{$name}}"><u>{{$name}}</u></a></td>
+                <td>{{$ups.Description}}</td>
+                <td>{{$ups.Status}}</td>
+                <td>{{$ups.BatteryCharge}}</td>
+            </tr>  
+        {{end}}
+        </tbody>
+    </table>
+</div>
+{{end}}
