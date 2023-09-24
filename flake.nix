@@ -19,6 +19,7 @@
             src = ./.;
             pname = name;
             vendorHash = "sha256-+zKY4KNUipSmu6108n7LThRf/wdZJuoARFkMkSzCyNw=";
+            CGO_ENABLED = "0";
 
             meta = with pkgs.lib; {
                 description = "A interface for managing your NUT server";
